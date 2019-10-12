@@ -16,15 +16,18 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((connection) => {
-    console.log('mongodb connected => ', connection.models);
+    console.log(chalk.bgYellow.white('\n>> Servidor ')
+    + chalk.bgYellow.white('MongoDB & ')
+    + chalk.bgYellow.white('Mongoose Rodando ')
+    + chalk.bgYellow.red('@ Porta 27017! <<\n'), connection.models);
   })
   .catch((err) => console.log(err));
 
 app.listen(PORT, () => {
   console.log(
-    chalk.bgYellow.blue('\n>> Servidor ')
+    chalk.bgYellow.white('\n>> Servidor ')
     + chalk.bgYellow.white('Express ')
-    + chalk.bgYellow.blue('Rodando ')
+    + chalk.bgYellow.white('Rodando ')
     + chalk.bgYellow.red(`@ Porta ${PORT}! <<\n`),
   );
 });
