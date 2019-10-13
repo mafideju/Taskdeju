@@ -46,3 +46,38 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const newUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(201).json({
+      status: 'SUCCESS',
+      data: {
+        task: newUser,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'FAIL',
+      message: err,
+    });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'SUCCESS',
+      data: null,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'FAIL',
+      message: err,
+    });
+  }
+};

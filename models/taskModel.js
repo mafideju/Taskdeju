@@ -5,9 +5,11 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Insert a Task'],
     unique: true,
+    trim: true,
   },
   completed: {
     type: Boolean,
+    default: false,
   },
 });
 
