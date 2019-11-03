@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,11 +29,31 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Você deve escolher uma senha para se cadastrar'],
     trim: true,
     minlength: [6, 'Senha deve conter mais que seis caracteres'],
-    validate(val) {
-      if (val.includes('password')) throw new Error('Senha Manjada. Tente Outra.');
+    validate(password) {
+      if (
+        password.includes('password')
+      || password.includes('123456')
+      || password.includes('000000')
+      ) throw new Error('Senha Manjada. Tente Outra.');
     },
   },
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Confirme sua senha...'],
+    validate(passwordConfirm) {
+      return passwordConfirm === this.password;
+    },
+    message: 'Senhas devem ser exatamente iguais !!!',
+  },
 });
+
+userSchema
+  .pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 12);
+    this.passwordConfirm = undefined;
+    next();
+  });
 
 const User = mongoose.model('User', userSchema);
 

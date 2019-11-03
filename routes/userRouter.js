@@ -7,7 +7,11 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-} = require('../controllers/userController');
+} = require('./../controllers/userController');
+const { signup } = require('./../controllers/authController');
+
+router
+  .post('/signup', signup);
 
 router
   .route('/')
