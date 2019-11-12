@@ -34,26 +34,26 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-exports.createUser = async (req, res) => {
-  try {
-    const newUser = await User.create(req.body);
-    res
-      .status(201)
-      .json({
-        status: 'SUCCESS',
-        data: {
-          user: newUser,
-        },
-      });
-  } catch (err) {
-    res
-      .status(400)
-      .json({
-        status: 'FAIL',
-        message: err,
-      });
-  }
-};
+// exports.createUser = async (req, res) => {
+//   try {
+//     const newUser = await User.create(req.body);
+//     res
+//       .status(201)
+//       .json({
+//         status: 'SUCCESS',
+//         data: {
+//           user: newUser,
+//         },
+//       });
+//   } catch (err) {
+//     res
+//       .status(400)
+//       .json({
+//         status: 'FAIL',
+//         message: err,
+//       });
+//   }
+// };
 
 exports.updateUser = async (req, res) => {
   try {

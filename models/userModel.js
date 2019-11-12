@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'User Must Have a Name'],
+    // required: [true, 'Nome é Obrigatório para Cadastro'],
     trim: true,
   },
   age: {
@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'User Must Have an Email'],
+    unique: true,
     trim: true,
     lowercase: true,
     validate(val) {
@@ -45,6 +46,11 @@ const userSchema = new mongoose.Schema({
     },
     message: 'Senhas devem ser exatamente iguais !!!',
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
 });
 
 userSchema
@@ -54,6 +60,13 @@ userSchema
     this.passwordConfirm = undefined;
     next();
   });
+
+userSchema
+  .methods
+  .correctPassword = async function (candidatePassword, userPassword) {
+    const comparation = await bcrypt.compare(candidatePassword, userPassword);
+    return comparation;
+  };
 
 const User = mongoose.model('User', userSchema);
 
