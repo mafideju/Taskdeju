@@ -8,7 +8,11 @@ const {
   updateUser,
   deleteUser,
 } = require('./../controllers/userController');
-const { signup, login } = require('./../controllers/authController');
+const {
+  signup,
+  login,
+  protect,
+} = require('./../controllers/authController');
 
 router
   .post('/signup', signup);
@@ -18,7 +22,7 @@ router
 
 router
   .route('/')
-  .get(getAllUsers);
+  .get(protect, getAllUsers);
 // .post(createUser);
 
 router

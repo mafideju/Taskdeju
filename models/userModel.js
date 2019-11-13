@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    // required: [true, 'Nome é Obrigatório para Cadastro'],
+    required: [true, 'Nome é Obrigatório para Cadastro'],
     trim: true,
   },
   age: {
@@ -49,7 +49,17 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['user', 'admin'],
+    required: true,
     default: 'user',
+  },
+  passwordChangedAt: {
+    type: Date,
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetExpires: {
+    type: Date,
   },
 });
 
@@ -66,6 +76,16 @@ userSchema
   .correctPassword = async function (candidatePassword, userPassword) {
     const comparation = await bcrypt.compare(candidatePassword, userPassword);
     return comparation;
+  };
+
+userSchema
+  .methods
+  .changedPasswordAfter = function (JWTTimestamp) {
+    if (this.passwordChangedAt) {
+      const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+      return JWTTimestamp < changedTimeStamp;
+    }
+    return false;
   };
 
 const User = mongoose.model('User', userSchema);
